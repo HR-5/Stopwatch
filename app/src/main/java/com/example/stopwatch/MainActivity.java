@@ -34,30 +34,33 @@ public class MainActivity extends AppCompatActivity {
     public void startTime(View v) {
         handler.removeCallbacks(runnable);
         running = true;
-        if(seconds==0) {
-            myCanvasView.drawsecond(30, 60);
-            seconds++;
-        }
-        else {
-            myCanvasView.drawsecond(seconds, minu);
-            seconds++;
-        }
+        final int[] sec = new int[1];
+        final int[] min = {seconds / 60};
+        if (seconds % 30 == 0) {
+            sec[0] = 30;
+        } else
+            sec[0] = seconds % 30;
+        if (min[0] % 60 == 0)
+            min[0] = 60;
+        else
+            min[0] = min[0] % 60;
+        myCanvasView.drawsecond(sec[0], min[0]);
+        seconds++;
         runnable = new Runnable() {
             @Override
             public void run() {
                 if (running) {
-                    int sec;
-                    int min = seconds / 60;
+                    min[0] = seconds / 60;
                     if (seconds % 30 == 0) {
-                        sec = 30;
+                        sec[0] = 30;
                     } else
-                        sec = seconds % 30;
-                    if (min % 60 == 0)
-                        min = 60;
+                        sec[0] = seconds % 30;
+                    if (min[0] % 60 == 0)
+                        min[0] = 60;
                     else
-                        min = min % 60;
-                    minu = min;
-                    myCanvasView.drawsecond(sec, min);
+                        min[0] = min[0] % 60;
+                    minu = min[0];
+                    myCanvasView.drawsecond(sec[0], min[0]);
                     seconds++;
                     handler.postDelayed(this, 1000);
                 }
